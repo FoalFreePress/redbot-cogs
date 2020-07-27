@@ -39,31 +39,25 @@ class VCLoggerCog(Commands.Cog):
         await ctx.send(f"Successfully unlinked {vc_channel.name}")
         return
 
-    async def handle_before_but_no_after(self, member: discord.Member, before_state: discord.VoiceState):
+    async def handle_before_state(self, member: discord.Member, before_state: discord.VoiceState):
         before = before_state.channel
         guild = before.guild
-        txt_id = 0
         try:
             async with self.config.guild(guild).links() as links:
                 txt_id = links[str(before.id)]
         except KeyError as key_error:
-            txt_id = 0
-        if txt_id == 0:
             return
         text_channel = guild.get_channel(txt_id)
         await text_channel.send(f"{member.display_name} has left the channel.")
         return
 
-    async def handle_no_before_but_after(self, member: discord.Member, after_state: discord.VoiceState):
+    async def handle_after_state(self, member: discord.Member, after_state: discord.VoiceState):
         after = after_state.channel
         guild = after.guild
-        txt_id = 0
         try:
             async with self.config.guild(guild).links() as links:
                 txt_id = links[str(after.id)]
         except KeyError as key_error:
-            txt_id = 0
-        if txt_id == 0:
             return
         text_channel = guild.get_channel(txt_id)
         await text_channel.send(f"{member.display_name} has joined the channel.")
@@ -76,34 +70,16 @@ class VCLoggerCog(Commands.Cog):
         before = before_state.channel
         after = after_state.channel
         if before is None:
-            await self.handle_no_before_but_after(member, after_state)
+            await self.handle_after_state(member, after_state)
             return
         if after is None:
-            await self.handle_before_but_no_after(member, before_state)
+            await self.handle_before_state(member, before_state)
             return
         if before.guild != after.guild:
             return
         if before == after:
             return
         guild = before.guild
-        txt_id = 0
-        try:
-            async with self.config.guild(guild).links() as links:
-                txt_id = links[str(after.id)]
-        except KeyError as key_error:
-            txt_id = 0
-        if txt_id == 0:
-            return
-        text_channel = guild.get_channel(txt_id)
-        await text_channel.send(f"{member.display_name} has joined the channel.")
-        txt_id = 0
-        try:
-            async with self.config.guild(guild).links() as links:
-                txt_id = links[str(before.id)]
-        except KeyError as key_error:
-            txt_id = 0
-        if txt_id == 0:
-            return
-        text_channel = guild.get_channel(txt_id)
-        await text_channel.send(f"{member.display_name} has left the channel.")
+        await self.handle_after_state(member, after_state)
+        await self.handle_before_state(member, before_state)
         return
