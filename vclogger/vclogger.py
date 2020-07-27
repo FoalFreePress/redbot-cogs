@@ -39,8 +39,7 @@ class VCLoggerCog(Commands.Cog):
         await ctx.send(f"Successfully unlinked {vc_channel.name}")
         return
 
-    async def handle_before_state(self, member: discord.Member, before_state: discord.VoiceState):
-        before = before_state.channel
+    async def handle_channel_leave(self, member: discord.Member, before: discord.VoiceChannel):
         guild = before.guild
         try:
             async with self.config.guild(guild).links() as links:
@@ -51,8 +50,7 @@ class VCLoggerCog(Commands.Cog):
         await text_channel.send(f"{member.display_name} has left the channel.")
         return
 
-    async def handle_after_state(self, member: discord.Member, after_state: discord.VoiceState):
-        after = after_state.channel
+    async def handle_channel_join(self, member: discord.Member, after: discord.VoiceChannel):
         guild = after.guild
         try:
             async with self.config.guild(guild).links() as links:
@@ -70,16 +68,14 @@ class VCLoggerCog(Commands.Cog):
         before = before_state.channel
         after = after_state.channel
         if before is None:
-            await self.handle_after_state(member, after_state)
+            await self.handle_channel_join(member, after)
             return
         if after is None:
-            await self.handle_before_state(member, before_state)
-            return
-        if before.guild != after.guild:
+            await self.handle_channel_leave(member, before)
             return
         if before == after:
             return
         guild = before.guild
-        await self.handle_after_state(member, after_state)
-        await self.handle_before_state(member, before_state)
+        await self.handle_channel_join(member, after)
+        await self.handle_channel_leave(member, before)
         return
