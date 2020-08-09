@@ -1,0 +1,27 @@
+{
+    "author":[
+        "shroomdog27"
+    ],
+    "name":"PrivateChannel",
+    "description":"Creates a private channel category and channel name based on a supplied user's username.",
+    "min_bot_version":"3.3.10",
+    "max_bot_version":"0.0.0",
+    "min_python_version":[
+        3,
+        8,
+        5
+    ],
+    "hidden":false,
+    "disable":false,
+    "required_cogs":{
+
+    },
+    "requirements":[
+
+    ],
+    "tags":[
+        "admin",
+        "channel"
+    ],
+    "type":"COG"
+}
