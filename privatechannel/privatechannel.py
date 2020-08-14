@@ -34,13 +34,13 @@ class PrivateChannelCog(Commands.Cog):
         self.config.register_guild(**default_guild)
         self.config.init_custom
 
-    @Commands.group()
+    @Commands.group(name="pc")
     @Commands.guild_only()
-    async def personalchannel(self, ctx):
+    async def privatechannel(self, ctx):
         """Root command for Private Channel Commands"""
         pass
 
-    @personalchannel.command(name="create")
+    @privatechannel.command(name="create")
     async def pc_create(self, ctx, target_member: discord.Member):
         """Creates a personal channel that sets it so only the Member can read messages.
         Intended to be used with people who have the 'Administrator' permission node."""
@@ -59,7 +59,7 @@ class PrivateChannelCog(Commands.Cog):
         await ctx.tick()
         return
 
-    @personalchannel.command(name="channel")
+    @privatechannel.command(name="channel")
     @Checks.admin_or_permissions(manage_channels=True)
     async def pc_channel(self, ctx, target_channel: discord.CategoryChannel):
         """Sets the channel to create new channels below."""
