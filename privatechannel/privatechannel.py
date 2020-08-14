@@ -44,18 +44,23 @@ class PrivateChannelCog(Commands.Cog):
     async def pc_create(self, ctx, target_member: discord.Member):
         """Creates a personal channel that sets it so only the Member can read messages.
         Intended to be used with people who have the 'Administrator' permission node."""
-        afterCategory = ctx.guild.get_channel((await self.config.guild(ctx.guild).channel()))
-        if afterCategory is None:
-            raise TypeError("Channel is null.")
+        category = ctx.guild.get_channel((await self.config.guild(ctx.guild).channel()))
+        if category is None:
+            await ctx.send("I couldn't fix the category you specified earlier. Was it deleted?")
+            return
         overwrites = {
             ctx.guild.default_role: discord.PermissionOverwrite(view_channel=False),
             target_member: discord.PermissionOverwrite(view_channel=True),
         }
-        newCategory = await ctx.guild.create_category_channel(
-            target_member.name, overwrites=overwrites, reason=f"Requested by {ctx.author.name}",
+        new_channel = await ctx.guild.create_text_channel(
+            target_member.name, category=category, reason=f"Requested by {ctx.author.name}"
         )
-        await newCategory.edit(position=afterCategory.position + 1)
-        await ctx.guild.create_text_channel("general", category=newCategory, reason=f"Requested by {ctx.author.name}")
+        await new_channel.edit(
+            overwrites=overwrites,
+            sync_permissions=False,
+            nsfw=True,
+            topic=f"A private channel for {target_member.name}",
+        )
         await ctx.tick()
         return
 
