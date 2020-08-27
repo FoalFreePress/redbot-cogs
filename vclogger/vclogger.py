@@ -83,7 +83,10 @@ class VCLoggerCog(Commands.Cog):
 
     @Commands.Cog.listener()
     async def on_voice_state_update(
-        self, member: discord.Member, before_state: discord.VoiceState, after_state: discord.VoiceState,
+        self,
+        member: discord.Member,
+        before_state: discord.VoiceState,
+        after_state: discord.VoiceState,
     ) -> None:
         before = before_state.channel
         after = after_state.channel
