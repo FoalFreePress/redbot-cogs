@@ -46,7 +46,7 @@ class VCLoggerCog(Commands.Cog):
         vc_id = vc_channel.id
         txt_id = txt_channel.id
         async with self.config.guild(ctx.guild).links() as links:
-            links[vc_id] = txt_id
+            links[str(vc_id)] = txt_id
         await ctx.send(f"Successfully linked {vc_channel.name} to {txt_channel.name}")
         return
 
@@ -55,7 +55,7 @@ class VCLoggerCog(Commands.Cog):
         """Unlinks a Voice Chat Channel"""
         vc_id = vc_channel.id
         async with self.config.guild(ctx.guild).links() as links:
-            del links[vc_id]
+            del links[str(vc_id)]
         await ctx.send(f"Successfully unlinked {vc_channel.name}")
         return
 
