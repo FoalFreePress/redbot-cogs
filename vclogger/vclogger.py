@@ -54,7 +54,6 @@ class VCLoggerCog(Commands.Cog):
     async def vclog_unlink(self, ctx, vc_channel: discord.VoiceChannel):
         """Unlinks a Voice Chat Channel"""
         vc_id = vc_channel.id
-        txt_id = txt_channel.id
         async with self.config.guild(ctx.guild).links() as links:
             del links[vc_id]
         await ctx.send(f"Successfully unlinked {vc_channel.name}")
