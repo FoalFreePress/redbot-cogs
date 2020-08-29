@@ -35,8 +35,6 @@ class VCLoggerCog(Commands.Cog):
     async def get_channel(self, guild: discord.Guild) -> discord.TextChannel:
         txt_id = await self.config.guild(guild).channel()
         text_channel = guild.get_channel(txt_id)
-        if text_channel is None:
-            print(f"Tried to get text_channel from id {txt_id}, but nothing returned from the config!")
         return text_channel
 
     async def set_channel(self, guild: discord.Guild, text_channel_id: int):
@@ -68,22 +66,17 @@ class VCLoggerCog(Commands.Cog):
             channel_msg = str(member) + " has joined " + inline(after.name)
             msg += channel_msg + "\n"
             channel_to_send = await self.get_channel(after.guild)
-            print("Before is none.")
         elif after is None:
             channel_msg = str(member) + " has left " + inline(before.name)
             msg += channel_msg + "\n"
             channel_to_send = await self.get_channel(before.guild)
-            print("after is none")
         elif before == after:
-            print("before is after")
             return
         else:
-            print("before is NOT after")
             channel_msg = str(member) + " has moved from " + inline(before.name) + " to " + inline(after.name)
             channel_to_send = await self.get_channel(after.guild)
             msg += channel_msg
         if channel_to_send is None:
-            print("channel to send is None. oof")
             return
         await channel_to_send.send(msg)
         return
