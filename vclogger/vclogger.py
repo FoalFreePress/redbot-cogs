@@ -20,8 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import discord
+import datetime
 from redbot.core import commands as Commands
 from redbot.core import Config
+from redbot.core.utils.chat_formatting import humanize_list, inline, escape
 
 
 class VCLoggerCog(Commands.Cog):
@@ -29,10 +31,16 @@ class VCLoggerCog(Commands.Cog):
 
     def __init__(self):
         self.config = Config.get_conf(self, identifier=777761593677316458)
-        default_guild = {"links": {}}
 
-        self.config.register_guild(**default_guild)
-        self.config.init_custom
+    async def get_channel(self, guild: discord.Guild) -> discord.TextChannel:
+        txt_id = await self.config.guild(guild).channel()
+        text_channel = guild.get_channel(txt_id)
+        if text_channel is None:
+            print(f"Tried to get text_channel from id {txt_id}, but nothing returned from the config!")
+        return text_channel
+
+    async def set_channel(self, guild: discord.Guild, text_channel_id: int):
+        await self.config.guild(guild).channel.set(text_channel_id)
 
     @Commands.group()
     @Commands.guild_only()
@@ -40,65 +48,42 @@ class VCLoggerCog(Commands.Cog):
         """Root command for Voice Chat Logger Commands"""
         pass
 
-    @vclog.command(name="link")
-    async def vclog_link(self, ctx, vc_channel: discord.VoiceChannel, txt_channel: discord.TextChannel):
-        """Links a Voice Chat Channel to a text Channel"""
-        vc_id = vc_channel.id
-        txt_id = txt_channel.id
-        async with self.config.guild(ctx.guild).links() as links:
-            links[str(vc_id)] = txt_id
-        await ctx.send(f"Successfully linked {vc_channel.name} to {txt_channel.name}")
-        return
-
-    @vclog.command(name="unlink")
-    async def vclog_unlink(self, ctx, vc_channel: discord.VoiceChannel):
-        """Unlinks a Voice Chat Channel"""
-        vc_id = vc_channel.id
-        async with self.config.guild(ctx.guild).links() as links:
-            del links[str(vc_id)]
-        await ctx.send(f"Successfully unlinked {vc_channel.name}")
-        return
-
-    async def handle_channel_leave(self, member: discord.Member, before: discord.VoiceChannel):
-        guild = before.guild
-        try:
-            async with self.config.guild(guild).links() as links:
-                txt_id = links[str(before.id)]
-        except KeyError as key_error:
-            return
-        text_channel = guild.get_channel(txt_id)
-        await text_channel.send(f"{member.display_name} has left the channel.")
-        return
-
-    async def handle_channel_join(self, member: discord.Member, after: discord.VoiceChannel):
-        guild = after.guild
-        try:
-            async with self.config.guild(guild).links() as links:
-                txt_id = links[str(after.id)]
-        except KeyError as key_error:
-            return
-        text_channel = guild.get_channel(txt_id)
-        await text_channel.send(f"{member.display_name} has joined the channel.")
+    @vclog.command(name="channel")
+    async def vclog_channel(self, ctx, txt_channel: discord.TextChannel):
+        """Sets the text channel to send messages to"""
+        vc_id = txt_channel.id
+        await self.set_channel(ctx.guild, vc_id)
+        await ctx.tick()
         return
 
     @Commands.Cog.listener()
     async def on_voice_state_update(
-        self,
-        member: discord.Member,
-        before_state: discord.VoiceState,
-        after_state: discord.VoiceState,
+        self, member: discord.Member, before_state: discord.VoiceState, after_state: discord.VoiceState
     ) -> None:
         before = before_state.channel
         after = after_state.channel
+        channel_to_send = None
+        msg = "{emoji} `{time}`".format(emoji=":microphone:", time=datetime.datetime.utcnow().strftime("%H:%M:%S"))
         if before is None:
-            await self.handle_channel_join(member, after)
+            channel_msg = str(member) + " has joined " + inline(after.name)
+            msg += channel_msg + "\n"
+            channel_to_send = await self.get_channel(after.guild)
+            print("Before is none.")
+        elif after is None:
+            channel_msg = str(member) + " has left " + inline(before.name)
+            msg += channel_msg + "\n"
+            channel_to_send = await self.get_channel(before.guild)
+            print("after is none")
+        elif before == after:
+            print("before is after")
             return
-        if after is None:
-            await self.handle_channel_leave(member, before)
+        else:
+            print("before is NOT after")
+            channel_msg = str(member) + " has moved from " + inline(before.name) + " to " + inline(after.name)
+            channel_to_send = await self.get_channel(after.guild)
+            msg += channel_msg
+        if channel_to_send is None:
+            print("channel to send is None. oof")
             return
-        if before == after:
-            return
-        guild = before.guild
-        await self.handle_channel_join(member, after)
-        await self.handle_channel_leave(member, before)
+        await channel_to_send.send(msg)
         return
