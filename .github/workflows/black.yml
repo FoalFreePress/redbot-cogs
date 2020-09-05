@@ -1,6 +1,6 @@
 name: black-checker
 
-on: [pull_request, push]
+on: [push]
 
 jobs:
   black:
@@ -8,6 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Black Code Formatter
-        uses: lgeiger/black-action@v1.0.1
+        uses: psf/black@stable
         with:
           args: "--line-length 120 --target-version py38 --check ."
