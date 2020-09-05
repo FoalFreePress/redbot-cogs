@@ -56,12 +56,17 @@ class VCLoggerCog(Commands.Cog):
 
     @Commands.Cog.listener()
     async def on_voice_state_update(
-        self, member: discord.Member, before_state: discord.VoiceState, after_state: discord.VoiceState
+        self,
+        member: discord.Member,
+        before_state: discord.VoiceState,
+        after_state: discord.VoiceState,
     ) -> None:
         before = before_state.channel
         after = after_state.channel
         channel_to_send = None
-        msg = "{emoji} `{time}`".format(emoji=":microphone:", time=datetime.datetime.now().strftime("%H:%M:%S"))
+        msg = "{emoji} `{time}`".format(
+            emoji=":microphone:", time=datetime.datetime.now().strftime("%H:%M:%S")
+        )
         if before is None:
             channel_msg = str(member) + " has joined " + inline(after.name)
             msg += channel_msg + "\n"
@@ -73,7 +78,13 @@ class VCLoggerCog(Commands.Cog):
         elif before == after:
             return
         else:
-            channel_msg = str(member) + " has moved from " + inline(before.name) + " to " + inline(after.name)
+            channel_msg = (
+                str(member)
+                + " has moved from "
+                + inline(before.name)
+                + " to "
+                + inline(after.name)
+            )
             channel_to_send = await self.get_channel(after.guild)
             msg += channel_msg
         if channel_to_send is None:
