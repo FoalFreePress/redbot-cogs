@@ -10,4 +10,4 @@ jobs:
       - name: Black Code Formatter
         uses: psf/black@stable
         with:
-          args: "--line-length 120 --target-version py38 --check ."
+          args: "-l 120 -t py38 --check ."
