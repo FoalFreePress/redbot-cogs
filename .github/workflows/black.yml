@@ -11,3 +11,7 @@ jobs:
         uses: psf/black@stable
         with:
           args: "-l 120 -t py38 --check ."
+      - name: Black version checker
+        uses: psf/black@stable
+        with:
+          args: --version
