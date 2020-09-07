@@ -8,10 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Black Code Formatter
-        uses: psf/black@stable
+        uses: lgeiger/black-action@master
         with:
           args: "-l 120 -t py38 --check ."
-      - name: Black version checker
-        uses: psf/black@stable
-        with:
-          args: --version
