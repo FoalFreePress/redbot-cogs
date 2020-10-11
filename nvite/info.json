@@ -1,0 +1,26 @@
+{
+    "author":[
+        "shroomdog27"
+    ],
+    "name":"nvite",
+    "description":"Allows creation of invites using custom parameters to force users to use the same settings every time.",
+    "min_bot_version":"3.4.0",
+    "max_bot_version":"0.0.0",
+    "min_python_version":[
+        3,
+        8,
+        5
+    ],
+    "hidden":false,
+    "disable":false,
+    "required_cogs":{
+
+    },
+    "requirements":[
+
+    ],
+    "tags":[
+        "invite"
+    ],
+    "type":"COG"
+}
