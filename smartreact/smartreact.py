@@ -25,6 +25,7 @@
 #######################################
 import copy
 import discord
+import re
 from redbot.core import Config, commands, checks
 from redbot.core.utils.chat_formatting import pagify
 
@@ -32,7 +33,10 @@ from redbot.core.utils.chat_formatting import pagify
 class SmartReact(commands.Cog):
     """Create automatic reactions when trigger words are typed in chat"""
 
-    default_guild_settings = {"reactions": {}}
+    default_guild_settings = {
+        "reactions": {}
+    }
+    ALPHANUMERIC = re.compile("[\W_]+")
 
     def __init__(self, bot):
         self.bot = bot
@@ -143,7 +147,7 @@ class SmartReact(commands.Cog):
         reacts = copy.deepcopy(await self.conf.guild(guild).reactions())
         if reacts is None:
             return
-        words = message.content.lower().split()
+        words = [self.ALPHANUMERIC.sub("", word) for word in message.content.lower().split()]
         for emoji in reacts:
             if set(w.lower() for w in reacts[emoji]).intersection(words):
                 emoji = self.fix_custom_emoji(emoji)
