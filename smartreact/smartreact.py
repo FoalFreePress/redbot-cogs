@@ -33,9 +33,7 @@ from redbot.core.utils.chat_formatting import pagify
 class SmartReact(commands.Cog):
     """Create automatic reactions when trigger words are typed in chat"""
 
-    default_guild_settings = {
-        "reactions": {}
-    }
+    default_guild_settings = {"reactions": {}}
     ALPHANUMERIC = re.compile("[\W_]+")
 
     def __init__(self, bot):
