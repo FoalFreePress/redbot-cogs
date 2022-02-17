@@ -61,7 +61,7 @@ class VCLoggerCog(Commands.Cog):
         before_state: discord.VoiceState,
         after_state: discord.VoiceState,
     ) -> None:
-        if(member.bot):
+        if member.bot:
             return
         before = before_state.channel
         after = after_state.channel
