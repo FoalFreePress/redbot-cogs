@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import discord
-import datetime
+import time
 from redbot.core import commands as Commands
 from redbot.core import Config
 from redbot.core.utils.chat_formatting import humanize_list, inline, escape
@@ -64,7 +64,7 @@ class VCLoggerCog(Commands.Cog):
         before = before_state.channel
         after = after_state.channel
         channel_to_send = None
-        msg = "{emoji} `{time}`".format(emoji=":microphone:", time="<t:" + str(datetime.datetime.now()) + ":f>")
+        msg = "{emoji} {time}".format(emoji=":microphone:", time="<t:" + str(time.time()) + ":f>")
         if before is None:
             channel_msg = str(member) + " has joined " + inline(after.name)
             msg += channel_msg + "\n"
