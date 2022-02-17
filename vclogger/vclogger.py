@@ -20,10 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import discord
-import datetime
+import time
 from redbot.core import commands as Commands
 from redbot.core import Config
-from redbot.core.utils.chat_formatting import humanize_list, inline, escape
+from redbot.core.utils.chat_formatting import inline
 
 
 class VCLoggerCog(Commands.Cog):
@@ -61,25 +61,35 @@ class VCLoggerCog(Commands.Cog):
         before_state: discord.VoiceState,
         after_state: discord.VoiceState,
     ) -> None:
+        if member.bot:
+            return
         before = before_state.channel
         after = after_state.channel
-        channel_to_send = None
-        msg = "{emoji} `{time}`".format(emoji=":microphone:", time=datetime.datetime.now().strftime("%H:%M:%S"))
+        guild = None
+
+        v_emoji = ":microphone:"
+        v_time = str(int(time.time()))
+        v_user = member.mention
+        v_action = None
+        v_channel = None
+
         if before is None:
-            channel_msg = str(member) + " has joined " + inline(after.name)
-            msg += channel_msg + "\n"
-            channel_to_send = await self.get_channel(after.guild)
+            v_action = "has joined"
+            v_channel = inline(after.name)
+            guild = after.guild
         elif after is None:
-            channel_msg = str(member) + " has left " + inline(before.name)
-            msg += channel_msg + "\n"
-            channel_to_send = await self.get_channel(before.guild)
+            v_action = "has left"
+            v_channel = inline(before.name)
+            guild = before.guild
         elif before == after:
             return
         else:
-            channel_msg = str(member) + " has moved from " + inline(before.name) + " to " + inline(after.name)
-            channel_to_send = await self.get_channel(after.guild)
-            msg += channel_msg
-        if channel_to_send is None:
-            return
-        await channel_to_send.send(msg)
+            v_action = "has moved from"
+            v_channel = inline(before.name) + " to " + inline(after.name)
+            guild = after.guild
+        msg = "{emoji} <t:{t_time}:f> {user} {action} {channel}".format(
+            emoji=v_emoji, t_time=v_time, user=v_user, action=v_action, channel=v_channel
+        )
+        s_channel = await self.get_channel(guild)
+        await s_channel.send(msg, allowed_mentions=discord.AllowedMentions.none())
         return

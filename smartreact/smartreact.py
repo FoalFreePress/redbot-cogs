@@ -153,5 +153,9 @@ class SmartReact(commands.Cog):
                     return
                 try:
                     await message.add_reaction(emoji)
-                except (discord.errors.Forbidden, discord.errors.InvalidArgument, discord.errors.NotFound):
+                except (
+                    discord.errors.Forbidden,
+                    discord.errors.InvalidArgument,
+                    discord.errors.NotFound,
+                ):
                     pass
