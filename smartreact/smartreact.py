@@ -113,9 +113,7 @@ class SmartReact(commands.Cog):
             await message.channel.send("Successfully added this reaction.")
 
         except (discord.errors.HTTPException, discord.errors.InvalidArgument):
-            await message.channel.send(
-                "That's not an emoji I recognize. " "(might be custom!)"
-            )
+            await message.channel.send("That's not an emoji I recognize. " "(might be custom!)")
 
     async def remove_smart_reaction(self, guild, word, emoji, message):
         try:
@@ -129,18 +127,12 @@ class SmartReact(commands.Cog):
                     await self.conf.guild(guild).reactions.set(reactions)
                     await message.channel.send("Removed this smart reaction.")
                 else:
-                    await message.channel.send(
-                        "That emoji is not used as a reaction " "for that word."
-                    )
+                    await message.channel.send("That emoji is not used as a reaction " "for that word.")
             else:
-                await message.channel.send(
-                    "There are no smart reactions which use " "this emoji."
-                )
+                await message.channel.send("There are no smart reactions which use " "this emoji.")
 
         except (discord.errors.HTTPException, discord.errors.InvalidArgument):
-            await message.channel.send(
-                "That's not an emoji I recognize. " "(might be custom!)"
-            )
+            await message.channel.send("That's not an emoji I recognize. " "(might be custom!)")
 
     # Thanks irdumb#1229 for the help making this "more Pythonic"
     @commands.Cog.listener()
@@ -153,9 +145,7 @@ class SmartReact(commands.Cog):
         reacts = copy.deepcopy(await self.conf.guild(guild).reactions())
         if reacts is None:
             return
-        words = [
-            self.ALPHANUMERIC.sub("", word) for word in message.content.lower().split()
-        ]
+        words = [self.ALPHANUMERIC.sub("", word) for word in message.content.lower().split()]
         for emoji in reacts:
             if set(w.lower() for w in reacts[emoji]).intersection(words):
                 emoji = self.fix_custom_emoji(emoji)
