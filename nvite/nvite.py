@@ -28,7 +28,12 @@ class nvite(commands.Cog):
 
     def __init__(self):
         self.config = Config.get_conf(self, identifier=163490961253466112)
-        default_guild = {"channel": None, "max_age": 0, "max_uses": 1, "temporary": False}
+        default_guild = {
+            "channel": None,
+            "max_age": 0,
+            "max_uses": 1,
+            "temporary": False,
+        }
         self.config.register_guild(**default_guild)
 
     @commands.command()

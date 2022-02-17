@@ -46,7 +46,9 @@ class PrivateChannelCog(Commands.Cog):
         Intended to be used with people who have the 'Administrator' permission node."""
         category = ctx.guild.get_channel((await self.config.guild(ctx.guild).channel()))
         if category is None:
-            await ctx.send("I couldn't fix the category you specified earlier. Was it deleted?")
+            await ctx.send(
+                "I couldn't fix the category you specified earlier. Was it deleted?"
+            )
             return
         overwrites = {
             ctx.guild.default_role: discord.PermissionOverwrite(view_channel=False),

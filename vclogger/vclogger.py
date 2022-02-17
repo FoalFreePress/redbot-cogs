@@ -78,7 +78,13 @@ class VCLoggerCog(Commands.Cog):
         elif before == after:
             return
         else:
-            channel_msg = str(member) + " has moved from " + inline(before.name) + " to " + inline(after.name)
+            channel_msg = (
+                str(member)
+                + " has moved from "
+                + inline(before.name)
+                + " to "
+                + inline(after.name)
+            )
             channel_to_send = await self.get_channel(after.guild)
             msg += channel_msg
         if channel_to_send is None:
