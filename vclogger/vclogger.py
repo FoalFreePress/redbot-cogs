@@ -64,7 +64,9 @@ class VCLoggerCog(Commands.Cog):
         before = before_state.channel
         after = after_state.channel
         channel_to_send = None
-        msg = "{emoji} `{time}`".format(emoji=":microphone:", time=datetime.datetime.now().strftime("%H:%M:%S"))
+        msg = "{emoji} `{time}`".format(
+            emoji=":microphone:", time="<t:" + str(datetime.datetime.now()) + ":f>"
+        )
         if before is None:
             channel_msg = str(member) + " has joined " + inline(after.name)
             msg += channel_msg + "\n"
