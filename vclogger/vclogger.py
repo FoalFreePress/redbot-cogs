@@ -65,23 +65,17 @@ class VCLoggerCog(Commands.Cog):
             return
         before = before_state.channel
         after = after_state.channel
-        channel_to_send = None
-        msg = "{emoji} <t:{time}:f> ".format(emoji=":microphone:", time=str(int(time.time())))
+        guild = None
+        msg = "{emoji} <t:{time}:f> {user} {action} {channel}".format(emoji=":microphone:", time=str(int(time.time())), user=member.mention)
         if before is None:
-            channel_msg = str(member) + " has joined " + inline(after.name)
-            msg += channel_msg + "\n"
-            channel_to_send = await self.get_channel(after.guild)
+            msg.format(action="has joined",channel=inline(after.name))
+            guild = after.guild
         elif after is None:
-            channel_msg = str(member) + " has left " + inline(before.name)
-            msg += channel_msg + "\n"
-            channel_to_send = await self.get_channel(before.guild)
+            msg.format(action="has left",channel=inline(before.name))
+            guild = before.guild
         elif before == after:
             return
-        else:
-            channel_msg = str(member) + " has moved from " + inline(before.name) + " to " + inline(after.name)
-            channel_to_send = await self.get_channel(after.guild)
-            msg += channel_msg
-        if channel_to_send is None:
-            return
-        await channel_to_send.send(msg)
+        msg.format(action="has moved from",channel=inline(before.name) + " to " + inline(after.name)
+        guild = after.guild
+        await (await self.get_channel(guild)).send(msg, allowed_mentions=AllowedMentions.none())
         return
