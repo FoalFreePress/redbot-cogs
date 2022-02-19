@@ -21,7 +21,8 @@
 # SOFTWARE.
 #######################################
 # This file is forked from FlapJack's SmartReact cog.
-# Original Source can be found at: https://github.com/flapjax/FlapJack-Cogs/tree/bbaef99b6bb490716bf4a62a210541260eea44bf/smartreact
+# Original Source can be found at:
+# https://github.com/flapjax/FlapJack-Cogs/tree/bbaef99b6bb490716bf4a62a210541260eea44bf/smartreact
 #######################################
 import copy
 import discord
@@ -34,7 +35,7 @@ class SmartReact(commands.Cog):
     """Create automatic reactions when trigger words are typed in chat"""
 
     default_guild_settings = {"reactions": {}}
-    ALPHANUMERIC = re.compile("[\W_]+")
+    ALPHANUMERIC = re.compile(r"[\W_]+")
 
     def __init__(self, bot):
         self.bot = bot
