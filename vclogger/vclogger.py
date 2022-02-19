@@ -68,8 +68,8 @@ class VCLoggerCog(Commands.Cog):
         guild = None
 
         v_emoji = ":microphone:"
-        v_time = str(int(time.time()))
-        v_user = member.mention
+        v_time = "<t:" + str(int(time.time())) + ":f>"
+        v_user = "**" + str(member) + "**"
         v_action = None
         v_channel = None
 
@@ -87,7 +87,7 @@ class VCLoggerCog(Commands.Cog):
             v_action = "has moved from"
             v_channel = inline(before.name) + " to " + inline(after.name)
             guild = after.guild
-        msg = "{emoji} <t:{t_time}:f> {user} {action} {channel}".format(
+        msg = "{emoji} {t_time} {user} {action} {channel}".format(
             emoji=v_emoji, t_time=v_time, user=v_user, action=v_action, channel=v_channel
         )
         s_channel = await self.get_channel(guild)
