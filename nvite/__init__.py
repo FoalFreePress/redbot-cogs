@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 from .nvite import nvite
+from redbot.core.bot import Red
 
 
-def setup(bot):
+async def setup(bot: Red) -> None:
     await bot.add_cog(nvite())

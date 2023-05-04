@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 from .privatechannel import PrivateChannelCog
+from redbot.core.bot import Red
 
 
-def setup(bot):
+async def setup(bot: Red) -> None:
     await bot.add_cog(PrivateChannelCog())

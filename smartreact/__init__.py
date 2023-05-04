@@ -25,9 +25,11 @@
 # https://github.com/flapjax/FlapJack-Cogs/tree/bbaef99b6bb490716bf4a62a210541260eea44bf/smartreact
 #######################################
 from .smartreact import SmartReact
+from redbot.core.bot import Red
+
 
 __red_end_user_data_statement__ = "This cog does not persistently store data or metadata about users."
 
 
-def setup(bot):
+async def setup(bot: Red) -> None:
     await bot.add_cog(SmartReact(bot))

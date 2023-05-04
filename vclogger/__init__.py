@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 from .vclogger import VCLoggerCog
+from redbot.core.bot import Red
 
 
-def setup(bot):
-    await bot.add_cog(VCLoggerCog())
+async def setup(bot: Red) -> None:
+    await bot.add_cog(VCLoggerCog(bot))
