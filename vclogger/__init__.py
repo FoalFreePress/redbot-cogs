@@ -24,4 +24,4 @@ from redbot.core.bot import Red
 
 
 async def setup(bot: Red) -> None:
-    await bot.add_cog(VCLoggerCog(bot))
+    await bot.add_cog(VCLoggerCog())
