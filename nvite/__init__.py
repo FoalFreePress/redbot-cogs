@@ -23,4 +23,4 @@ from .nvite import nvite
 
 
 def setup(bot):
-    bot.add_cog(nvite())
+    await bot.add_cog(nvite())
