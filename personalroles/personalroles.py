@@ -271,7 +271,6 @@ class PersonalRoles(commands.Cog):
         else:
             await ctx.send(chat.info(_("There is no blacklisted roles")))
 
-    @commands.cooldown(1, 30, commands.BucketType.user)
     @myrole.command(aliases=["color"])
     @commands.guild_only()
     @commands.check(has_assigned_role)
@@ -288,7 +287,6 @@ class PersonalRoles(commands.Cog):
         try:
             await role.edit(colour=colour, reason=get_audit_reason(ctx.author, _("Personal Role")))
         except discord.Forbidden:
-            ctx.command.reset_cooldown(ctx)
             await ctx.send(
                 chat.error(
                     _(
@@ -298,7 +296,6 @@ class PersonalRoles(commands.Cog):
                 )
             )
         except discord.HTTPException as e:
-            ctx.command.reset_cooldown(ctx)
             await ctx.send(chat.error(_("Unable to edit role: {}").format(e)))
         else:
             if not colour.value:
@@ -310,7 +307,6 @@ class PersonalRoles(commands.Cog):
                     )
                 )
 
-    @commands.cooldown(1, 30, commands.BucketType.user)
     @myrole.command()
     @commands.guild_only()
     @commands.check(has_assigned_role)
@@ -332,7 +328,6 @@ class PersonalRoles(commands.Cog):
         try:
             await role.edit(name=name, reason=get_audit_reason(ctx.author, _("Personal Role")))
         except discord.Forbidden:
-            ctx.command.reset_cooldown(ctx)
             await ctx.send(
                 chat.error(
                     _(
@@ -342,14 +337,12 @@ class PersonalRoles(commands.Cog):
                 )
             )
         except discord.HTTPException as e:
-            ctx.command.reset_cooldown(ctx)
             await ctx.send(chat.error(_("Unable to edit role: {}").format(e)))
         else:
             await ctx.send(
                 _("Changed name of {user}'s personal role to {name}").format(user=ctx.message.author.name, name=name)
             )
 
-    @commands.cooldown(1, 30, commands.BucketType.user)
     @myrole.command()
     @commands.guild_only()
     @commands.check(has_assigned_role)
@@ -393,7 +386,6 @@ class PersonalRoles(commands.Cog):
         pass
 
     @icon.command(name="emoji")
-    @commands.cooldown(1, 30, commands.BucketType.user)
     async def icon_emoji(self, ctx, *, emoji: Union[discord.Emoji, discord.PartialEmoji] = None):
         """Change icon of personal role using emoji"""
         role = await self.config.member(ctx.author).role()
@@ -451,18 +443,15 @@ class PersonalRoles(commands.Cog):
                     reason=get_audit_reason(ctx.author, _("Personal Role")),
                 )
         except discord.Forbidden:
-            ctx.command.reset_cooldown(ctx)
             await ctx.send(chat.error(_("Unable to edit role.\nRole must be lower than my top role")))
         except discord.InvalidArgument:
             await ctx.send(chat.error(_("This image type is unsupported, or link is incorrect")))
         except discord.HTTPException as e:
-            ctx.command.reset_cooldown(ctx)
             await ctx.send(chat.error(_("Unable to edit role: {}").format(e)))
         else:
             await ctx.send(_("Changed icon of {user}'s personal role").format(user=ctx.message.author.name))
 
     @icon.command(name="image", aliases=["url"])
-    @commands.cooldown(1, 30, commands.BucketType.user)
     async def icon_image(self, ctx, *, url: str = None):
         """Change icon of personal role by using image"""
         role = await self.config.member(ctx.author).role()
@@ -490,18 +479,15 @@ class PersonalRoles(commands.Cog):
                 reason=get_audit_reason(ctx.author, _("Personal Role")),
             )
         except discord.Forbidden:
-            ctx.command.reset_cooldown(ctx)
             await ctx.send(chat.error(_("Unable to edit role.\nRole must be lower than my top role")))
         except discord.InvalidArgument:
             await ctx.send(chat.error(_("This image type is unsupported, or link is incorrect")))
         except discord.HTTPException as e:
-            ctx.command.reset_cooldown(ctx)
             await ctx.send(chat.error(_("Unable to edit role: {}").format(e)))
         else:
             await ctx.send(_("Changed icon of {user}'s personal role").format(user=ctx.message.author.name))
 
     @icon.command(name="reset", aliases=["remove"])
-    @commands.cooldown(1, 30, commands.BucketType.user)
     async def icon_reset(self, ctx):
         """Remove icon of personal role"""
         role = await self.config.member(ctx.author).role()
@@ -520,10 +506,8 @@ class PersonalRoles(commands.Cog):
             )
             await ctx.send(_("Removed icon of {user}'s personal role").format(user=ctx.message.author.name))
         except discord.Forbidden:
-            ctx.command.reset_cooldown(ctx)
             await ctx.send(chat.error(_("Unable to edit role.\nRole must be lower than my top role")))
         except discord.HTTPException as e:
-            ctx.command.reset_cooldown(ctx)
             await ctx.send(chat.error(_("Unable to edit role: {}").format(e)))
 
     ### Listeners
