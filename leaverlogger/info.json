@@ -1,0 +1,28 @@
+{
+    "author":[
+        "shroomdog27"
+    ],
+    "name":"LeaverLogger",
+    "description":"Logs to a join/leave message to a channel when someone leaves a voice channel.",
+    "min_bot_version":"3.3.10",
+    "max_bot_version":"0.0.0",
+    "min_python_version":[
+        3,
+        8,
+        5
+    ],
+    "hidden":false,
+    "disable":false,
+    "required_cogs":{
+
+    },
+    "requirements":[
+
+    ],
+    "tags":[
+        "mod",
+        "logs",
+        "modlogs"
+    ],
+    "type":"COG"
+}

@@ -9,8 +9,8 @@ To add the cogs to your instance please do: `[p]repo add shroomdog27 https://git
 ### Cogs
 | Name | Status/Version | Description (Click to see full status)
 | --- | --- | --- |
+| nvite | **1** | <details><summary>Allows creation of invites using custom parameters to force users to use the same settings every time.</summary></details>|
 | PrivateChannel| **2** | <details><summary>Allows you to create a private text channel under a configurable category for a given user.</summary></details>|
 | VCLogger| **2** | <details><summary>Logs all voice channel joins and leaves in your server. Sends to a configurable channel.</summary></details>|
-| nvite | **1** | <details><summary>Allows creation of invites using custom parameters to force users to use the same settings every time.</summary></details>|
-
+| LeaverLogger | **1** | <details><summary>Logs all leaves of the server.</summary></details>| 
 You can post questions to the issues tab on this board.
