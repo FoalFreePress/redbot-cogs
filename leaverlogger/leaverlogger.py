@@ -65,12 +65,32 @@ class LeaverLoggerCog(Commands.Cog):
         if member.bot:
             return
 
-        v_emoji = "⬅️"
-        v_time = "<t:" + str(int(time.time())) + ":f>"
-        v_user = "**" + str(member) + "**"
-        v_action = "has left the server."
+        await self.send_message(
+            (await self.get_channel(guild)),
+            "⬅️",
+            "<t:" + str(int(time.time())) + ":f>",
+            "**" + str(member) + "**",
+            "has left the server.",
+        )
+        return
 
+    @Commands.Cog.listener("on_member_join")
+    async def on_member_join(self, member: discord.Member) -> None:
+        guild = member.guild
+
+        if member.bot:
+            return
+
+        await self.send_message(
+            (await self.get_channel(guild)),
+            "➡️",
+            "<t:" + str(int(time.time())) + ":f>",
+            "**" + str(member) + "**",
+            "has joined the server.",
+        )
+        return
+
+    async def send_message(self, s_channel, v_emoji, v_time, v_user, v_action) -> None:
         msg = "{emoji} {t_time} {user} {action}".format(emoji=v_emoji, t_time=v_time, user=v_user, action=v_action)
-        s_channel = await self.get_channel(guild)
         await s_channel.send(msg, allowed_mentions=discord.AllowedMentions.none())
         return
