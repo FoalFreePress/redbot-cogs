@@ -66,7 +66,7 @@ class LeaverLoggerCog(Commands.Cog):
             return
 
         await self.send_message(
-            self.get_channel(guild),
+            (await self.get_channel(guild)),
             "⬅️",
             "<t:" + str(int(time.time())) + ":f>",
             "**" + str(member) + "**",
@@ -82,7 +82,7 @@ class LeaverLoggerCog(Commands.Cog):
             return
 
         await self.send_message(
-            self.get_channel(guild),
+            (await self.get_channel(guild)),
             "➡️",
             "<t:" + str(int(time.time())) + ":f>",
             "**" + str(member) + "**",
